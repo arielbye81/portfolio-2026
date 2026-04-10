@@ -1,6 +1,14 @@
 @import 'tailwindcss';
 @import 'tw-animate-css';
 
+@font-face {
+  font-family: 'Schnyder XL';
+  src: url('/fonts/schnyder xl bold italic.otf') format('opentype');
+  font-weight: 700;
+  font-style: italic;
+  font-display: swap;
+}
+
 @custom-variant dark (&:is(.dark *));
 
 :root {
@@ -99,4 +107,11 @@
 
 html {
   scroll-behavior: smooth;
+}
+
+.font-schnyder-e2e {
+  font-family: 'Schnyder XL', serif;
+  font-style: italic;
+  font-weight: 700;
+  font-size: calc(1em + 4pt);
 }

@@ -112,7 +112,7 @@ export function CaseStudyContent({ study }: { study: CaseStudyData }) {
           {/* Left column — sticky sidebar */}
           <aside className="mb-12 lg:mb-0">
             <div className="lg:sticky lg:top-32">
-              <div className="mb-10 hidden">
+              <div className="mb-10">
                 <Link
                   href="/"
                   className="inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-foreground"
@@ -148,7 +148,7 @@ export function CaseStudyContent({ study }: { study: CaseStudyData }) {
                 {study.subtitle}
               </p>
 
-              <dl className="mb-10 grid grid-cols-2 gap-4">
+              <dl className="mb-10 hidden grid-cols-2 gap-4">
                 {meta.map((item) => (
                   <div key={item.label}>
                     <dt className="text-[11px] uppercase tracking-widest text-muted-foreground">

@@ -75,7 +75,7 @@ export function ProjectCard({
           </span>
         ))}
         {techniques.length > 3 && (
-          <span className="text-xs text-muted-foreground/50">
+          <span className="inline-flex self-center text-xs leading-none text-muted-foreground/50">
             +{techniques.length - 3}
           </span>
         )}

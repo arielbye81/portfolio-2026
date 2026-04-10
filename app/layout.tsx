@@ -10,12 +10,7 @@ export const metadata: Metadata = {
   title: 'Bei Ye — UI/UX Designer',
   description: '10+ years in UI/UX, transforming messy ideas into intuitive experiences.',
   icons: {
-    icon: [
-      {
-        url: '/icon.svg',
-        type: 'image/svg+xml',
-      },
-    ],
+    icon: [{ url: '/logo.png', type: 'image/png' }],
   },
 }
 
