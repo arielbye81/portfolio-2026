@@ -7,7 +7,6 @@ import type { CaseStudyImage } from "@/lib/case-studies"
 interface ProjectCardProps {
   title: string
   description: string
-  tags: string[]
   techniques: string[]
   slug: string
   index: number
@@ -17,7 +16,6 @@ interface ProjectCardProps {
 export function ProjectCard({
   title,
   description,
-  tags,
   techniques,
   slug,
   index,
@@ -47,17 +45,6 @@ export function ProjectCard({
             </div>
           )}
         </div>
-      </div>
-      {/* Tags: hidden on homepage only (ProjectCard is only used in InfiniteScroll); keep markup + tags prop for easy restore */}
-      <div className="mb-3 hidden flex-wrap gap-2" aria-hidden="true">
-        {tags.map((tag) => (
-          <span
-            key={tag}
-            className="rounded-[2px] border border-border px-2.5 py-0.5 text-xs tracking-wider text-muted-foreground"
-          >
-            {tag}
-          </span>
-        ))}
       </div>
       <h3 className="text-xl font-medium text-foreground mb-2 group-hover:text-muted-foreground transition-colors">
         {title}

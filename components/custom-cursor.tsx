@@ -1,6 +1,6 @@
 "use client"
 
-import { useCallback, useEffect, useState } from "react"
+import { useCallback, useEffect, useRef, useState } from "react"
 
 /**
  * DOM-follow “fake” cursor (crisp on retina vs cursor:url bitmap).
@@ -8,10 +8,34 @@ import { useCallback, useEffect, useState } from "react"
  * Over [data-cursor-morph-image], morphs between dot and rounded-rect (pill).
  */
 export function CustomCursor() {
-  const [pos, setPos] = useState({ x: 0, y: 0 })
   const [hidden, setHidden] = useState(true)
   const [variant, setVariant] = useState<"dot" | "pill">("dot")
   const [enabled, setEnabled] = useState(false)
+  const cursorRef = useRef<HTMLDivElement>(null)
+  const frameRef = useRef<number | null>(null)
+  const queuedPos = useRef({ x: 0, y: 0 })
+  const appliedPos = useRef({ x: Number.NaN, y: Number.NaN })
+
+  const flushCursorPosition = useCallback(() => {
+    frameRef.current = null
+    const node = cursorRef.current
+    if (!node) return
+
+    const { x, y } = queuedPos.current
+    if (x === appliedPos.current.x && y === appliedPos.current.y) return
+
+    node.style.transform = `translate3d(${x}px, ${y}px, 0) translate(-50%, -50%)`
+    appliedPos.current = { x, y }
+  }, [])
+
+  const queueCursorPosition = useCallback(
+    (x: number, y: number) => {
+      queuedPos.current = { x, y }
+      if (frameRef.current !== null) return
+      frameRef.current = requestAnimationFrame(flushCursorPosition)
+    },
+    [flushCursorPosition]
+  )
 
   useEffect(() => {
     const mqFine = window.matchMedia("(pointer: fine)")
@@ -34,6 +58,7 @@ export function CustomCursor() {
   const onPointerMove = useCallback((e: PointerEvent) => {
     const x = e.clientX
     const y = e.clientY
+    queueCursorPosition(x, y)
     const el = document.elementFromPoint(x, y)
 
     let nextHidden = true
@@ -55,15 +80,26 @@ export function CustomCursor() {
       }
     }
 
-    setPos((p) => (p.x === x && p.y === y ? p : { x, y }))
     setHidden((h) => (h === nextHidden ? h : nextHidden))
     setVariant((v) => (v === nextVariant ? v : nextVariant))
-  }, [])
+  }, [queueCursorPosition])
 
   useEffect(() => {
-    if (!enabled) return
+    if (!enabled) {
+      if (frameRef.current !== null) {
+        cancelAnimationFrame(frameRef.current)
+        frameRef.current = null
+      }
+      return
+    }
     window.addEventListener("pointermove", onPointerMove, { passive: true })
-    return () => window.removeEventListener("pointermove", onPointerMove)
+    return () => {
+      window.removeEventListener("pointermove", onPointerMove)
+      if (frameRef.current !== null) {
+        cancelAnimationFrame(frameRef.current)
+        frameRef.current = null
+      }
+    }
   }, [enabled, onPointerMove])
 
   if (!enabled) return null
@@ -78,12 +114,13 @@ export function CustomCursor() {
 
   return (
     <div
+      ref={cursorRef}
       aria-hidden
       className={`pointer-events-none fixed left-0 top-0 z-[9999] flex items-center justify-center overflow-hidden transition-[width,height] duration-300 ease-out ${
         hidden ? "opacity-0" : "opacity-100"
       } ${shapeClass}`}
       style={{
-        transform: `translate3d(${pos.x}px, ${pos.y}px, 0) translate(-50%, -50%)`,
+        willChange: "transform",
       }}
     >
       <span

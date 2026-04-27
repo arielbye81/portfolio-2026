@@ -3,6 +3,23 @@ export interface CaseStudyImage {
   alt: string
 }
 
+export const CASE_STUDY_SLUGS = ["daily-bread", "apolink", "emissions-tracker", "flower-plus"] as const
+export type CaseStudySlug = (typeof CASE_STUDY_SLUGS)[number]
+const CASE_STUDY_SLUG_SET = new Set<string>(CASE_STUDY_SLUGS)
+
+export function isCaseStudySlug(slug: string): slug is CaseStudySlug {
+  return CASE_STUDY_SLUG_SET.has(slug)
+}
+
+export interface CaseStudySummary {
+  slug: CaseStudySlug
+  title: string
+  subtitle: string
+  tags: string[]
+  techniques: string[]
+  heroImage?: CaseStudyImage
+}
+
 export type CaseStudySection =
   | { type: "intro"; content: string }
   | { type: "split"; left: string; right: string }
@@ -44,7 +61,7 @@ export interface CaseStudyContent {
   sections: CaseStudySection[]
 }
 
-export const caseStudies: Record<string, CaseStudyContent> = {
+export const caseStudies: Record<CaseStudySlug, CaseStudyContent> = {
   "daily-bread": {
     title: "Daily Bread",
     subtitle: "A Unified and Action-Oriented Supply Chain Management System",

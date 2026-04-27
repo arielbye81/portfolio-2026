@@ -2,18 +2,18 @@ import { notFound } from "next/navigation"
 import Link from "next/link"
 import { Header } from "@/components/header"
 import { CaseStudyContent } from "@/components/case-study-content"
-import { caseStudies } from "@/lib/case-studies"
+import { caseStudies, CASE_STUDY_SLUGS, isCaseStudySlug } from "@/lib/case-studies"
 import { PAGE_SHELL, PAGE_INNER } from "@/lib/layout"
 
 export default async function CaseStudyPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
-  const study = caseStudies[slug]
-
-  if (!study) {
+  if (!isCaseStudySlug(slug)) {
     notFound()
   }
 
-  const slugs = Object.keys(caseStudies)
+  const study = caseStudies[slug]
+
+  const slugs = CASE_STUDY_SLUGS
   const currentIndex = slugs.indexOf(slug)
   const prevSlug = slugs[(currentIndex - 1 + slugs.length) % slugs.length]
   const prevStudy = caseStudies[prevSlug]
@@ -92,5 +92,5 @@ export default async function CaseStudyPage({ params }: { params: Promise<{ slug
 }
 
 export function generateStaticParams() {
-  return Object.keys(caseStudies).map((slug) => ({ slug }))
+  return CASE_STUDY_SLUGS.map((slug) => ({ slug }))
 }

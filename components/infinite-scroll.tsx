@@ -1,7 +1,7 @@
 "use client"
 
 import { useRef, useEffect, useLayoutEffect, useCallback } from "react"
-import { caseStudies } from "@/lib/case-studies"
+import { homeProjectSummaries } from "@/lib/case-study-summaries"
 import { ProjectCard } from "./project-card"
 
 /**
@@ -14,19 +14,7 @@ function getOneSetScrollWidth(container: HTMLDivElement): number {
   return Math.round(container.scrollWidth / 3)
 }
 
-const PROJECT_SLUGS = ["daily-bread", "apolink", "emissions-tracker", "flower-plus"] as const
-
-const projects = PROJECT_SLUGS.map((slug) => {
-  const c = caseStudies[slug]
-  return {
-    title: c.title,
-    description: c.subtitle,
-    tags: c.tags,
-    techniques: c.techniques ?? [],
-    slug,
-    image: c.heroImage,
-  }
-})
+const projects = homeProjectSummaries
 
 export function InfiniteScroll() {
   const scrollRef = useRef<HTMLDivElement>(null)
@@ -126,12 +114,11 @@ export function InfiniteScroll() {
           <ProjectCard
             key={`${project.slug}-${index}`}
             title={project.title}
-            description={project.description}
-            tags={project.tags}
+            description={project.subtitle}
             techniques={project.techniques}
             slug={project.slug}
             index={index % projects.length}
-            image={project.image}
+            image={project.heroImage}
           />
         ))}
       </div>
