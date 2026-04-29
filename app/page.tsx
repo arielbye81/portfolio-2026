@@ -4,6 +4,7 @@ import { AboutSection } from "@/components/about-section"
 import { Footer } from "@/components/footer"
 import { HomeScrollReset } from "@/components/home-scroll-reset"
 import { HomeIntroReveal } from "@/components/home-intro-reveal"
+import { HomeContentReveal } from "@/components/home-content-reveal"
 
 export default async function Home({
   searchParams,
@@ -11,15 +12,18 @@ export default async function Home({
   searchParams: Promise<{ skipIntro?: string }>
 }) {
   const { skipIntro } = await searchParams
+  const shouldSkipIntro = skipIntro === "1"
 
   return (
     <main className="bg-background">
-      <HomeIntroReveal skip={skipIntro === "1"} />
+      <HomeIntroReveal skip={shouldSkipIntro} />
       <HomeScrollReset />
-      <Header />
-      <HeroSection />
-      <AboutSection />
-      <Footer />
+      <HomeContentReveal skipIntro={shouldSkipIntro}>
+        <Header />
+        <HeroSection />
+        <AboutSection />
+        <Footer />
+      </HomeContentReveal>
     </main>
   )
 }

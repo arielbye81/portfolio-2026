@@ -1,3 +1,4 @@
+import type { CSSProperties } from "react"
 import Image from "next/image"
 import { InfiniteScroll } from "./infinite-scroll"
 import { PAGE_SHELL } from "@/lib/layout"
@@ -9,10 +10,13 @@ const clientLogos = [
   { name: "Flower", src: "/images/logos/flower.png", scale: 1.3 },
 ] as const
 
+const heroCopyRevealStyle = { "--home-reveal-delay": "80ms" } as CSSProperties
+const workRevealStyle = { "--home-reveal-delay": "180ms" } as CSSProperties
+
 export function HeroSection() {
   return (
     <section className={`flex min-h-screen flex-col ${PAGE_SHELL} pt-32 pb-16`}>
-      <div className="my-auto max-w-2xl">
+      <div className="my-auto max-w-2xl" data-home-reveal="intro" style={heroCopyRevealStyle}>
         <h1 className="text-xl md:text-2xl font-normal text-foreground leading-[1.40] mb-6 text-balance">
           <span className="text-[calc(1em-2pt)]">
             With 10+ years in UI/UX, I combine front-end expertise, visual craft, and product thinking{" "}
@@ -44,7 +48,7 @@ export function HeroSection() {
         </div>
       </div>
 
-      <div id="work" className="pt-8">
+      <div id="work" className="pt-8" data-home-reveal="intro" style={workRevealStyle}>
         <InfiniteScroll />
       </div>
     </section>

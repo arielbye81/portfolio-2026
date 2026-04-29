@@ -1,6 +1,6 @@
 "use client"
 
-import { MouseEvent, useState } from "react"
+import { MouseEvent, useState, type CSSProperties } from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { PAGE_SHELL } from "@/lib/layout"
@@ -21,6 +21,8 @@ function NavRollingLabel({ label }: { label: string }) {
 const navLinkClassName =
   "group inline-flex items-center text-sm text-muted-foreground transition-colors hover:text-foreground focus-visible:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background rounded-sm"
 
+const headerRevealStyle = { "--home-reveal-delay": "0ms" } as CSSProperties
+
 export function Header() {
   const [menuOpen, setMenuOpen] = useState(false)
 
@@ -36,7 +38,11 @@ export function Header() {
   }
 
   return (
-    <header className={`fixed top-0 left-0 right-0 z-50 ${PAGE_SHELL} py-6 flex items-center justify-between bg-background/80 backdrop-blur-sm`}>
+    <header
+      className={`fixed top-0 left-0 right-0 z-50 ${PAGE_SHELL} py-6 flex items-center justify-between bg-background/80 backdrop-blur-sm`}
+      data-home-reveal="intro"
+      style={headerRevealStyle}
+    >
       <Link
         href="/"
         className="inline-flex items-center gap-[15px] text-left text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background rounded-sm"

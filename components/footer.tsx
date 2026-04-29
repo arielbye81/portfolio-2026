@@ -1,11 +1,18 @@
+import type { CSSProperties } from "react"
 import { PAGE_SHELL, PAGE_INNER } from "@/lib/layout"
+
+const footerRevealStyle = { "--home-reveal-delay": "0ms" } as CSSProperties
 
 export function Footer() {
   const currentYear = new Date().getFullYear()
 
   return (
     <footer className={`${PAGE_SHELL} border-t border-border pt-[calc(2.5rem*2/3)] pb-10`}>
-      <div className={`${PAGE_INNER} flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between`}>
+      <div
+        className={`${PAGE_INNER} flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between`}
+        data-home-reveal="scroll"
+        style={footerRevealStyle}
+      >
         <p className="text-xs text-muted-foreground">
           &copy; {currentYear} Bei Ye. All rights reserved.
         </p>

@@ -1,3 +1,4 @@
+import type { CSSProperties } from "react"
 import Image from "next/image"
 import { PAGE_SHELL, PAGE_INNER } from "@/lib/layout"
 
@@ -15,6 +16,10 @@ const skills = [
   { name: "Jira", icon: "J" },
 ]
 
+const aboutCopyRevealStyle = { "--home-reveal-delay": "0ms" } as CSSProperties
+const skillsRevealStyle = { "--home-reveal-delay": "120ms" } as CSSProperties
+const portraitRevealStyle = { "--home-reveal-delay": "160ms" } as CSSProperties
+
 export function AboutSection() {
   return (
     <section id="about" className={`min-h-screen ${PAGE_SHELL} pt-32 pb-[calc(8rem*2/3)]`}>
@@ -22,7 +27,11 @@ export function AboutSection() {
         <div className="flex flex-col gap-16 lg:grid lg:grid-cols-12 lg:items-stretch lg:gap-x-24 lg:gap-y-24">
           <div className="max-lg:contents lg:col-span-7 lg:flex lg:flex-col lg:gap-20 lg:-mt-14">
             <div className="max-lg:contents lg:flex lg:flex-col lg:gap-10">
-              <div className="order-1 lg:order-none space-y-10">
+              <div
+                className="order-1 lg:order-none space-y-10"
+                data-home-reveal="scroll"
+                style={aboutCopyRevealStyle}
+              >
                 <div>
                   <p className="mb-8 text-xs text-muted-foreground uppercase tracking-widest">About</p>
                   <p className="text-xl md:text-2xl text-foreground leading-[1.3] text-balance font-schnyder-title">
@@ -63,7 +72,11 @@ export function AboutSection() {
                 </div>
               </div>
 
-              <div className="order-2 lg:order-none">
+              <div
+                className="order-2 lg:order-none"
+                data-home-reveal="scroll"
+                style={skillsRevealStyle}
+              >
                 <div className="flex flex-wrap gap-3">
                   {skills.map((skill) => (
                     <div
@@ -79,7 +92,11 @@ export function AboutSection() {
             </div>
           </div>
 
-          <div className="relative order-3 flex min-h-[280px] flex-col items-center gap-6 lg:order-none lg:col-span-5 lg:col-start-8 lg:row-start-1 lg:min-h-0 lg:-mt-[4.25rem] lg:gap-8 lg:overflow-visible p-6 md:p-8 lg:p-0">
+          <div
+            className="relative order-3 flex min-h-[280px] flex-col items-center gap-6 lg:order-none lg:col-span-5 lg:col-start-8 lg:row-start-1 lg:min-h-0 lg:-mt-[4.25rem] lg:gap-8 lg:overflow-visible p-6 md:p-8 lg:p-0"
+            data-home-reveal="scroll"
+            style={portraitRevealStyle}
+          >
             <div className="relative mx-auto aspect-[4/5] w-full max-w-[32rem] shrink-0 overflow-hidden rounded-sm lg:mt-[100px] lg:w-[min(100%,24rem)] lg:max-w-none lg:aspect-[4/5]">
               <div className="relative h-full w-full min-h-0">
                 <Image
