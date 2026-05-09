@@ -184,8 +184,7 @@ html {
   line-height: 1.14;
   letter-spacing: 0.01em;
   font-weight: 500;
-  animation: home-intro-line 1400ms cubic-bezier(0.22, 1, 0.36, 1) both;
-  will-change: opacity, transform;
+  animation: home-intro-line 1050ms cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
 .home-intro-reveal__line + .home-intro-reveal__line {
@@ -224,19 +223,19 @@ html {
 }
 
 .home-intro-reveal__tile:nth-child(1) {
-  animation-delay: 1600ms;
+  animation-delay: 1240ms;
 }
 
 .home-intro-reveal__tile:nth-child(2) {
-  animation-delay: 1720ms;
+  animation-delay: 1360ms;
 }
 
 .home-intro-reveal__tile:nth-child(3) {
-  animation-delay: 1840ms;
+  animation-delay: 1480ms;
 }
 
 .home-intro-reveal__tile:nth-child(4) {
-  animation-delay: 1960ms;
+  animation-delay: 1600ms;
 }
 
 @keyframes home-intro-line {
@@ -245,7 +244,7 @@ html {
     transform: translate3d(0, 16px, 0);
   }
   24%,
-  81% {
+  58% {
     opacity: 1;
     transform: translate3d(0, 0, 0);
   }
@@ -265,23 +264,40 @@ html {
   }
 }
 
-/* Homepage content reveal: overlaps the final 20% of the black intro, then scroll-reveals lower sections. */
+/* Homepage content reveal: case-study rhythm with a larger homepage-only rise. */
+@keyframes home-content-enter-from-bottom {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 2rem, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+/* Homepage content reveal: case-study rhythm with a larger homepage-only rise. */
 .home-content-reveal [data-home-reveal] {
   opacity: 0;
-  transform: translate3d(0, 1.35rem, 0);
-  transition:
-    opacity 900ms cubic-bezier(0.16, 1, 0.3, 1),
-    transform 900ms cubic-bezier(0.16, 1, 0.3, 1);
-  transition-delay: var(--home-reveal-delay, 0ms);
-  will-change: opacity, transform;
+  transform: translate3d(0, 2rem, 0);
 }
 
-.home-content-reveal[data-skip-intro="true"] [data-home-reveal],
-.home-content-reveal [data-home-reveal].is-visible {
+.home-content-reveal--animating [data-home-reveal="intro"] {
+  animation: home-content-enter-from-bottom 1.05s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: var(--home-reveal-delay, 0ms);
+}
+
+.home-content-reveal [data-home-reveal="scroll"].is-visible {
+  animation: home-content-enter-from-bottom 1.05s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: var(--home-reveal-delay, 0ms);
+}
+
+.home-content-reveal--off [data-home-reveal],
+.home-content-reveal[data-skip-intro="true"] [data-home-reveal] {
+  animation: none;
   opacity: 1;
-  transform: translate3d(0, 0, 0);
+  transform: none;
 }
-
 @media (prefers-reduced-motion: reduce) {
   .home-intro-reveal {
     display: none;
@@ -293,6 +309,7 @@ html {
   }
 
   .home-content-reveal [data-home-reveal] {
+    animation: none;
     opacity: 1;
     transform: none;
     transition: none;

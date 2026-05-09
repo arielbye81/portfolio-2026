@@ -10,8 +10,8 @@ const clientLogos = [
   { name: "Flower", src: "/images/logos/flower.png", scale: 1.3 },
 ] as const
 
-const heroCopyRevealStyle = { "--home-reveal-delay": "80ms" } as CSSProperties
-const workRevealStyle = { "--home-reveal-delay": "180ms" } as CSSProperties
+const heroCopyRevealStyle = { "--home-reveal-delay": "120ms" } as CSSProperties
+const workRevealStyle = { "--home-reveal-delay": "0ms" } as CSSProperties
 
 export function HeroSection() {
   return (

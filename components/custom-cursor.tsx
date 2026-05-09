@@ -109,7 +109,7 @@ export function CustomCursor() {
   /* Dot and pill both use rounded-full: only width/height change. Animating
    * rounded-full → rounded-xl interpolates px values oddly (“two-stage” look). */
   const shapeClass = isPill
-    ? "h-7 w-[96px] rounded-full bg-black/35 backdrop-blur-sm"
+    ? "h-7 w-[96px] rounded-full bg-black/35"
     : "h-4 w-4 rounded-full bg-[#505050]"
 
   return (

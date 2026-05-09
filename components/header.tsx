@@ -21,7 +21,7 @@ function NavRollingLabel({ label }: { label: string }) {
 const navLinkClassName =
   "group inline-flex items-center text-sm text-muted-foreground transition-colors hover:text-foreground focus-visible:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background rounded-sm"
 
-const headerRevealStyle = { "--home-reveal-delay": "0ms" } as CSSProperties
+const headerRevealStyle = { "--home-reveal-delay": "240ms" } as CSSProperties
 
 export function Header() {
   const [menuOpen, setMenuOpen] = useState(false)
@@ -39,7 +39,7 @@ export function Header() {
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 ${PAGE_SHELL} py-6 flex items-center justify-between bg-background/80 backdrop-blur-sm`}
+      className={`fixed top-0 left-0 right-0 z-50 ${PAGE_SHELL} py-6 flex items-center justify-between bg-background/90`}
       data-home-reveal="intro"
       style={headerRevealStyle}
     >
@@ -111,7 +111,7 @@ export function Header() {
       {/* Mobile dropdown */}
       {menuOpen && (
         <nav
-          className="absolute top-full left-0 right-0 border-b border-border bg-background/95 backdrop-blur-sm px-5 py-6 flex flex-col gap-5 sm:hidden"
+          className="absolute top-full left-0 right-0 border-b border-border bg-background/95 px-5 py-6 flex flex-col gap-5 sm:hidden"
           aria-label="Mobile navigation"
         >
           <Link

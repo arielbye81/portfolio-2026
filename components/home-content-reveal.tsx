@@ -7,7 +7,9 @@ interface HomeContentRevealProps {
   skipIntro?: boolean
 }
 
-const FIRST_SCREEN_REVEAL_DELAY_MS = 2400
+type HomeEntrance = "idle" | "animating" | "off"
+
+const HOME_REVEAL_ARM_DELAY_MS = 1500
 const VIEWPORT_REVEAL_ROOT_MARGIN = "0px 0px -12% 0px"
 
 function prefersReducedMotion() {
@@ -20,7 +22,7 @@ function revealElement(element: Element) {
 
 export function HomeContentReveal({ children, skipIntro = false }: HomeContentRevealProps) {
   const rootRef = useRef<HTMLDivElement>(null)
-  const [isArmed, setIsArmed] = useState(skipIntro)
+  const [entrance, setEntrance] = useState<HomeEntrance>(skipIntro ? "off" : "idle")
 
   useEffect(() => {
     const root = rootRef.current
@@ -30,17 +32,19 @@ export function HomeContentReveal({ children, skipIntro = false }: HomeContentRe
 
     if (skipIntro || prefersReducedMotion()) {
       revealItems.forEach(revealElement)
-      setIsArmed(true)
+      setEntrance("off")
       return
     }
 
-    const firstScreenItems = revealItems.filter((item) => item.getAttribute("data-home-reveal") === "intro")
     const viewportItems = revealItems.filter((item) => item.getAttribute("data-home-reveal") === "scroll")
+    let firstFrame = 0
+    let secondFrame = 0
 
-    const introTimer = window.setTimeout(() => {
-      firstScreenItems.forEach(revealElement)
-      setIsArmed(true)
-    }, FIRST_SCREEN_REVEAL_DELAY_MS)
+    const armTimer = window.setTimeout(() => {
+      firstFrame = requestAnimationFrame(() => {
+        secondFrame = requestAnimationFrame(() => setEntrance("animating"))
+      })
+    }, HOME_REVEAL_ARM_DELAY_MS)
 
     const observer = new IntersectionObserver(
       (entries) => {
@@ -56,7 +60,9 @@ export function HomeContentReveal({ children, skipIntro = false }: HomeContentRe
     viewportItems.forEach((item) => observer.observe(item))
 
     return () => {
-      window.clearTimeout(introTimer)
+      window.clearTimeout(armTimer)
+      cancelAnimationFrame(firstFrame)
+      cancelAnimationFrame(secondFrame)
       observer.disconnect()
     }
   }, [skipIntro])
@@ -64,7 +70,7 @@ export function HomeContentReveal({ children, skipIntro = false }: HomeContentRe
   return (
     <div
       ref={rootRef}
-      className={isArmed ? "home-content-reveal is-armed" : "home-content-reveal"}
+      className={`home-content-reveal home-content-reveal--${entrance}`}
       data-skip-intro={skipIntro ? "true" : undefined}
     >
       {children}
