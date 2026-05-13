@@ -15,3 +15,6 @@ node_modules/
 .next/
 .DS_Store
 *.tsbuildinfo
+
+# Superpowers / agent session cache (not part of the app)
+.superpowers/
