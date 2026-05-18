@@ -122,33 +122,32 @@ html {
   font-weight: 700;
 }
 
-/* Case study: staggered fade-in on route entry (see components/case-study-content.tsx) */
-@keyframes case-study-enter {
-  from {
-    opacity: 0;
-    transform: translate3d(0, 1.125rem, 0);
-  }
-  to {
-    opacity: 1;
-    transform: translate3d(0, 0, 0);
-  }
-}
-
-/* Pre-mount: hidden until JS arms `.case-study-enter` (avoids animation finishing before first paint). */
+/* Case study: staggered fade-in on route entry (see components/case-study-content.tsx).
+   Motion matches homepage scroll reveal: home-content-enter-from-bottom. */
 .case-study-enter-prep {
   opacity: 0;
-  transform: translate3d(0, 1.125rem, 0);
+  transform: translate3d(0, 2rem, 0);
 }
 
 .case-study-enter {
   opacity: 0;
-  animation: case-study-enter 1.05s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation: home-content-enter-from-bottom 1.05s cubic-bezier(0.16, 1, 0.3, 1) both;
   animation-delay: var(--enter-delay, 0ms);
+}
+
+.case-study-scroll-reveal {
+  opacity: 0;
+  transform: translate3d(0, 2rem, 0);
+}
+
+.case-study-scroll-reveal.is-visible {
+  animation: home-content-enter-from-bottom 1.05s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
 @media (prefers-reduced-motion: reduce) {
   .case-study-enter-prep,
-  .case-study-enter {
+  .case-study-enter,
+  .case-study-scroll-reveal {
     animation: none;
     opacity: 1;
     transform: none;
@@ -170,36 +169,46 @@ html {
 
 .home-intro-reveal__text {
   position: absolute;
-  left: clamp(1.5rem, 5vw, 4.5rem);
-  bottom: clamp(2rem, 8vh, 5rem);
+  top: 50%;
+  right: clamp(1rem, 3vw, 2rem);
+  left: clamp(1rem, 3vw, 2rem);
   z-index: 3;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: center;
+  column-gap: clamp(0.5rem, 2.5vw, 2rem);
+  transform: translate3d(0, -50%, 0);
 }
 
 .home-intro-reveal__line {
   margin: 0;
-  color: #fff;
+  color: rgba(255, 255, 255, 0.68);
   opacity: 0;
-  transform: translate3d(0, 16px, 0);
-  font-size: clamp(1.05rem, 1.7vw, 1.5rem);
-  line-height: 1.14;
-  letter-spacing: 0.01em;
-  font-weight: 500;
-  animation: home-intro-line 1050ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  transform: translate3d(0, 8px, 0);
+  font-size: clamp(0.72rem, 0.9vw, 0.95rem);
+  line-height: 1.1;
+  letter-spacing: 0;
+  font-weight: 400;
+  white-space: nowrap;
+  animation: home-intro-line 2200ms cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
 .home-intro-reveal__line + .home-intro-reveal__line {
-  margin-top: 0.18em;
+  margin-top: 0;
 }
 
 .home-intro-reveal__line:nth-child(1) {
+  justify-self: start;
   animation-delay: 160ms;
 }
 
 .home-intro-reveal__line:nth-child(2) {
+  justify-self: center;
   animation-delay: 240ms;
 }
 
 .home-intro-reveal__line:nth-child(3) {
+  justify-self: end;
   animation-delay: 320ms;
 }
 
@@ -214,7 +223,7 @@ html {
 .home-intro-reveal__tile {
   background: #000;
   transform: translate3d(0, 0, 0);
-  animation: home-intro-tile 950ms cubic-bezier(0.19, 1, 0.22, 1) both;
+  animation: home-intro-tile 1100ms cubic-bezier(0.19, 1, 0.22, 1) both;
   will-change: transform;
 }
 
@@ -223,34 +232,34 @@ html {
 }
 
 .home-intro-reveal__tile:nth-child(1) {
-  animation-delay: 1240ms;
+  animation-delay: 2400ms;
 }
 
 .home-intro-reveal__tile:nth-child(2) {
-  animation-delay: 1360ms;
+  animation-delay: 2520ms;
 }
 
 .home-intro-reveal__tile:nth-child(3) {
-  animation-delay: 1480ms;
+  animation-delay: 2640ms;
 }
 
 .home-intro-reveal__tile:nth-child(4) {
-  animation-delay: 1600ms;
+  animation-delay: 2760ms;
 }
 
 @keyframes home-intro-line {
   0% {
     opacity: 0;
-    transform: translate3d(0, 16px, 0);
+    transform: translate3d(0, 8px, 0);
   }
-  24%,
-  58% {
+  18%,
+  72% {
     opacity: 1;
     transform: translate3d(0, 0, 0);
   }
   100% {
     opacity: 0;
-    transform: translate3d(0, -10px, 0);
+    transform: translate3d(0, -6px, 0);
   }
 }
 

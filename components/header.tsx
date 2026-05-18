@@ -71,7 +71,7 @@ export function Header() {
         <Link href="/#about" className={navLinkClassName} onClick={(event) => handleSectionClick(event, "about")}>
           <NavRollingLabel label="About" />
         </Link>
-        <a href="mailto:406597900@qq.com" className={navLinkClassName}>
+        <a href="mailto:beiye.81@yahoo.com" className={navLinkClassName}>
           <NavRollingLabel label="Contact" />
         </a>
       </nav>
@@ -135,7 +135,7 @@ export function Header() {
             <NavRollingLabel label="About" />
           </Link>
           <a
-            href="mailto:406597900@qq.com"
+            href="mailto:beiye.81@yahoo.com"
             className={navLinkClassName}
             onClick={() => setMenuOpen(false)}
           >

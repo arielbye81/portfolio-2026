@@ -3,22 +3,30 @@ import Image from "next/image"
 import { PAGE_SHELL, PAGE_INNER } from "@/lib/layout"
 
 const skills = [
-  { name: "Figma", icon: "F" },
-  { name: "Sketch", icon: "S" },
-  { name: "Adobe XD", icon: "Xd" },
-  { name: "Photoshop", icon: "Ps" },
-  { name: "Illustrator", icon: "Ai" },
-  { name: "After Effects", icon: "Ae" },
-  { name: "Principle", icon: "Pr" },
-  { name: "React", icon: "Re" },
-  { name: "HTML/CSS", icon: "H" },
-  { name: "Miro", icon: "M" },
-  { name: "Jira", icon: "J" },
-]
+  { name: "Sketch", src: "/images/tools/sketch.png" },
+  { name: "Figma", src: "/images/tools/figma.png" },
+  { name: "Illustrator", src: "/images/tools/ai.png" },
+  { name: "Photoshop", src: "/images/tools/ps.png" },
+  { name: "Principle", src: "/images/tools/Principal.png" },
+  { name: "Blender", src: "/images/tools/Blender.png" },
+  { name: "C4D", src: "/images/tools/c4d.png" },
+  { name: "CSS", src: "/images/tools/css.png" },
+  { name: "HTML", src: "/images/tools/html.png" },
+  { name: "CodeX", src: "/images/tools/codex.png" },
+  { name: "Cursor", src: "/images/tools/cursor.png" },
+  { name: "Rive", src: "/images/tools/rive.png" },
+  { name: "Miro", src: "/images/tools/miro.png" },
+  { name: "ProtoPie", src: "/images/tools/protopie.png" },
+] as const
 
 const aboutCopyRevealStyle = { "--home-reveal-delay": "0ms" } as CSSProperties
 const skillsRevealStyle = { "--home-reveal-delay": "120ms" } as CSSProperties
 const portraitRevealStyle = { "--home-reveal-delay": "160ms" } as CSSProperties
+const portraitContactStyle = {
+  position: "relative",
+  zIndex: 1,
+  transform: "translateY(-120px)",
+} as CSSProperties
 
 export function AboutSection() {
   return (
@@ -83,7 +91,16 @@ export function AboutSection() {
                       key={skill.name}
                       className="flex items-center gap-2 px-3 py-2 border border-border/50 hover:border-border transition-colors"
                     >
-                      <span className="text-[10px] font-medium text-muted-foreground/60 w-4">{skill.icon}</span>
+                      <span className="relative flex h-4 w-4 shrink-0 items-center justify-center">
+                        <Image
+                          src={skill.src}
+                          alt=""
+                          width={16}
+                          height={16}
+                          className="h-4 w-4 object-contain"
+                          aria-hidden
+                        />
+                      </span>
                       <span className="text-xs text-muted-foreground">{skill.name}</span>
                     </div>
                   ))}
@@ -109,13 +126,16 @@ export function AboutSection() {
                 />
               </div>
             </div>
-            <p className="mx-auto w-full max-w-[min(100%,calc(32rem*4/3))] text-center text-sm leading-relaxed text-muted-foreground md:text-base lg:-mt-[100px]">
+            <p
+              className="font-schnyder-title mx-auto w-full max-w-[min(100%,calc(32rem*4/3))] text-center text-sm leading-relaxed text-muted-foreground md:text-base"
+              style={portraitContactStyle}
+            >
               Crafted using vibe coding. Feel free to reach
               <br />
               me at{" "}
               <a
                 href="mailto:beiye.81@yahoo.com"
-                className="font-medium text-foreground underline underline-offset-4 decoration-foreground/70 transition-colors hover:decoration-foreground"
+                className="text-foreground underline underline-offset-4 decoration-foreground/70 transition-colors hover:decoration-foreground"
               >
                 beiye.81@yahoo.com
               </a>

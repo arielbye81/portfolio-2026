@@ -3,6 +3,9 @@ import type { CaseStudySection } from "@/lib/case-studies"
 
 type SectionNeighbor = CaseStudySection["type"] | undefined
 
+/** Scroll-driven reveal: same as image blocks; observed in case-study-content.tsx */
+const CASE_STUDY_SCROLL_REVEAL = "case-study-scroll-reveal" as const
+
 export function SectionRenderer({
   section,
   prevType,
@@ -15,7 +18,10 @@ export function SectionRenderer({
   switch (section.type) {
     case "intro":
       return (
-        <div className="mb-12 max-w-2xl md:mb-14">
+        <div
+          className={`mb-12 max-w-2xl md:mb-14 ${CASE_STUDY_SCROLL_REVEAL}`}
+          data-case-study-reveal="scroll"
+        >
           <p className="text-base font-normal leading-relaxed text-foreground md:text-lg">
             {section.content}
           </p>
@@ -26,11 +32,12 @@ export function SectionRenderer({
       const isQuad = section.stats.length >= 4
       return (
         <div
-          className={`my-8 grid border-y border-border py-8 md:my-10 md:py-10 ${
+          className={`my-8 grid border-y border-border py-8 md:my-10 md:py-10 ${CASE_STUDY_SCROLL_REVEAL} ${
             isQuad
               ? "grid-cols-2 gap-4 sm:gap-6 lg:grid-cols-4 lg:gap-6 xl:gap-8"
               : "grid-cols-3 gap-6 md:gap-8"
           }`}
+          data-case-study-reveal="scroll"
         >
           {section.stats.map((stat, i) => (
             <div key={i} className="min-w-0">
@@ -44,7 +51,10 @@ export function SectionRenderer({
 
     case "split":
       return (
-        <div className="my-8 grid grid-cols-1 gap-8 md:my-10 lg:grid-cols-2 lg:gap-12">
+        <div
+          className={`my-8 grid grid-cols-1 gap-8 md:my-10 lg:grid-cols-2 lg:gap-12 ${CASE_STUDY_SCROLL_REVEAL}`}
+          data-case-study-reveal="scroll"
+        >
           <p className="text-sm leading-relaxed text-muted-foreground md:text-base">
             {section.left}
           </p>
@@ -58,7 +68,10 @@ export function SectionRenderer({
       if (typeof section.image !== "string") {
         return (
           <figure className="my-8 md:my-10">
-            <div className="w-full overflow-hidden rounded-[3px] border border-border">
+            <div
+              className={`${CASE_STUDY_SCROLL_REVEAL} w-full overflow-hidden rounded-[3px] border border-border`}
+              data-case-study-reveal="scroll"
+            >
               <Image
                 src={section.image.src}
                 alt={section.image.alt}
@@ -74,7 +87,10 @@ export function SectionRenderer({
 
       return (
         <figure className="my-8 md:my-10">
-          <div className="flex aspect-[16/9] w-full items-center justify-center rounded-lg border border-dashed border-border/60 bg-muted/30 px-4">
+          <div
+            className={`flex aspect-[16/9] w-full items-center justify-center rounded-lg border border-dashed border-border/60 bg-muted/30 px-4 ${CASE_STUDY_SCROLL_REVEAL}`}
+            data-case-study-reveal="scroll"
+          >
             <span className="text-center text-sm text-muted-foreground">
               {typeof section.image === "string" ? section.image : "Image"}
             </span>
@@ -84,7 +100,10 @@ export function SectionRenderer({
 
     case "quote":
       return (
-        <div className="my-8 max-w-2xl md:my-10">
+        <div
+          className={`my-8 max-w-2xl md:my-10 ${CASE_STUDY_SCROLL_REVEAL}`}
+          data-case-study-reveal="scroll"
+        >
           <blockquote className="mb-3 text-base font-normal leading-relaxed text-foreground md:text-lg">
             &ldquo;{section.content}&rdquo;
           </blockquote>
@@ -100,9 +119,10 @@ export function SectionRenderer({
         <div
           className={
             tightBeforeList
-              ? "mt-8 mb-2 max-w-2xl md:mt-10 md:mb-2"
-              : "my-8 max-w-2xl md:my-10"
+              ? `mt-8 mb-2 max-w-2xl md:mt-10 md:mb-2 ${CASE_STUDY_SCROLL_REVEAL}`
+              : `my-8 max-w-2xl md:my-10 ${CASE_STUDY_SCROLL_REVEAL}`
           }
+          data-case-study-reveal="scroll"
         >
           <p className="text-sm leading-relaxed text-muted-foreground md:text-base">
             {section.content}
@@ -124,7 +144,8 @@ export function SectionRenderer({
             typeof image === "string" ? (
               <div
                 key={i}
-                className="flex aspect-[16/10] w-full items-center justify-center rounded-lg border border-dashed border-border/60 bg-muted/30 p-4"
+                className={`flex aspect-[16/10] w-full items-center justify-center rounded-lg border border-dashed border-border/60 bg-muted/30 p-4 ${CASE_STUDY_SCROLL_REVEAL}`}
+                data-case-study-reveal="scroll"
               >
                 <span className="text-center text-sm text-muted-foreground">
                   {image}
@@ -133,7 +154,8 @@ export function SectionRenderer({
             ) : (
               <div
                 key={i}
-                className="relative aspect-[16/10] w-full overflow-hidden rounded-lg border border-border/50 bg-muted/20"
+                className={`${CASE_STUDY_SCROLL_REVEAL} relative aspect-[16/10] w-full overflow-hidden rounded-lg border border-border/50 bg-muted/20`}
+                data-case-study-reveal="scroll"
               >
                 <Image
                   src={image.src}
@@ -150,7 +172,10 @@ export function SectionRenderer({
 
     case "highlight":
       return (
-        <div className="my-8 rounded-sm bg-muted px-6 py-6 md:my-10 md:px-8 md:py-8">
+        <div
+          className={`my-8 rounded-sm bg-muted px-6 py-6 md:my-10 md:px-8 md:py-8 ${CASE_STUDY_SCROLL_REVEAL}`}
+          data-case-study-reveal="scroll"
+        >
           <p className="text-sm font-normal leading-relaxed text-foreground md:text-base">
             {section.content}
           </p>
@@ -159,7 +184,10 @@ export function SectionRenderer({
 
     case "section-header":
       return (
-        <div className="mb-6 border-t border-border pt-6 md:pt-8">
+        <div
+          className={`mb-6 border-t border-border pt-6 md:pt-8 ${CASE_STUDY_SCROLL_REVEAL}`}
+          data-case-study-reveal="scroll"
+        >
           <h2 className="text-xs uppercase tracking-widest text-muted-foreground">
             {section.title}
           </h2>
@@ -172,8 +200,11 @@ export function SectionRenderer({
       return (
         <div
           className={
-            afterTextBlock ? "mb-8 mt-0 md:mb-10 md:mt-0" : "my-8 md:my-10"
+            afterTextBlock
+              ? `mb-8 mt-0 md:mb-10 md:mt-0 ${CASE_STUDY_SCROLL_REVEAL}`
+              : `my-8 md:my-10 ${CASE_STUDY_SCROLL_REVEAL}`
           }
+          data-case-study-reveal="scroll"
         >
           {section.title && (
             <p className="mb-3 text-sm font-medium leading-relaxed text-muted-foreground md:text-base">{section.title}</p>
@@ -215,9 +246,10 @@ export function SectionRenderer({
         <div
           className={
             afterAnotherTwoCol
-              ? "mb-8 mt-14 grid grid-cols-1 gap-8 md:mb-10 md:mt-20 md:grid-cols-2 md:gap-12"
-              : "my-8 grid grid-cols-1 gap-8 md:my-10 md:grid-cols-2 md:gap-12"
+              ? `mb-8 mt-14 grid grid-cols-1 gap-8 md:mb-10 md:mt-20 md:grid-cols-2 md:gap-12 ${CASE_STUDY_SCROLL_REVEAL}`
+              : `my-8 grid grid-cols-1 gap-8 md:my-10 md:grid-cols-2 md:gap-12 ${CASE_STUDY_SCROLL_REVEAL}`
           }
+          data-case-study-reveal="scroll"
         >
           <div>
             {section.leftTitle && (
@@ -267,7 +299,10 @@ export function SectionRenderer({
 
     case "two-column-features":
       return (
-        <div className="my-8 grid grid-cols-1 gap-8 md:my-10 md:grid-cols-2 md:gap-12">
+        <div
+          className={`my-8 grid grid-cols-1 gap-8 md:my-10 md:grid-cols-2 md:gap-12 ${CASE_STUDY_SCROLL_REVEAL}`}
+          data-case-study-reveal="scroll"
+        >
           <div>
             {section.leftTitle && (
               <p className="mb-3 text-sm font-medium leading-relaxed text-muted-foreground md:text-base">{section.leftTitle}</p>

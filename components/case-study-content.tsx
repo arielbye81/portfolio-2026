@@ -39,6 +39,10 @@ function caseStudyEnterMotionStyle(
   return caseStudyEnterStyle(index, stepMs)
 }
 
+function revealCaseStudyElement(element: Element) {
+  element.classList.add("is-visible")
+}
+
 function groupSections(sections: CaseStudySection[]): {
   preamble: CaseStudySection[]
   groups: SectionGroup[]
@@ -67,11 +71,12 @@ function groupSections(sections: CaseStudySection[]): {
 }
 
 export function CaseStudyContent({ study }: { study: CaseStudyData }) {
-  const { preamble, groups } = groupSections(study.sections)
+  const { preamble, groups } = useMemo(() => groupSections(study.sections), [study.sections])
   const [activeSection, setActiveSection] = useState<string>(groups[0]?.id ?? "")
   const [showBackToTop, setShowBackToTop] = useState(false)
   const [entrance, setEntrance] = useState<CaseStudyEntrance>("idle")
   const sectionRefs = useRef<Map<string, HTMLElement>>(new Map())
+  const contentRef = useRef<HTMLDivElement>(null)
   const isClickScrolling = useRef(false)
 
   const setSectionRef = useCallback((id: string, el: HTMLElement | null) => {
@@ -122,6 +127,33 @@ export function CaseStudyContent({ study }: { study: CaseStudyData }) {
     return () => cancelAnimationFrame(id)
   }, [])
 
+  useEffect(() => {
+    const root = contentRef.current
+    if (!root) return
+
+    const revealItems = Array.from(root.querySelectorAll("[data-case-study-reveal='scroll']"))
+
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      revealItems.forEach(revealCaseStudyElement)
+      return
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return
+          revealCaseStudyElement(entry.target)
+          observer.unobserve(entry.target)
+        })
+      },
+      { rootMargin: "0px 0px -12% 0px", threshold: 0.12 }
+    )
+
+    revealItems.forEach((item) => observer.observe(item))
+
+    return () => observer.disconnect()
+  }, [groups, preamble])
+
   const handleTocClick = (id: string) => {
     const el = sectionRefs.current.get(id)
     if (!el) return
@@ -150,16 +182,8 @@ export function CaseStudyContent({ study }: { study: CaseStudyData }) {
     const subtitle = n++
     const techniques = study.techniques && study.techniques.length > 0 ? n++ : undefined
     const toc = groups.length > 0 ? n++ : undefined
-    const contentBase = n
-    /** First stagger index for each section group's first block (for per-block delays). */
-    const groupContentStart: number[] = []
-    let cursor = contentBase + preamble.length
-    for (const g of groups) {
-      groupContentStart.push(cursor)
-      cursor += g.sections.length
-    }
-    return { STEP_MS, back, tags, title, subtitle, techniques, toc, contentBase, groupContentStart }
-  }, [study.techniques, groups, preamble.length])
+    return { STEP_MS, back, tags, title, subtitle, techniques, toc }
+  }, [study.techniques, groups])
 
   return (
     <div className={PAGE_SHELL}>
@@ -268,22 +292,26 @@ export function CaseStudyContent({ study }: { study: CaseStudyData }) {
                     {groups.map((group) => {
                       const isActive = activeSection === group.id
                       return (
-                        <li key={group.id} className="flex items-center">
-                          <span
-                            className={`h-px transition-all duration-200 ${
-                              isActive ? "w-4 mr-2 bg-foreground" : "w-0 bg-transparent"
-                            }`}
-                          />
+                        <li key={group.id}>
                           <button
                             type="button"
                             onClick={() => handleTocClick(group.id)}
-                            className={`text-left text-sm transition-all duration-200 ${
-                              isActive
-                                ? "font-medium text-foreground"
-                                : "font-normal text-muted-foreground hover:text-foreground"
-                            }`}
+                            className="block w-full border-0 bg-transparent p-0 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
                           >
-                            {group.title}
+                            <span
+                              style={{
+                                transform: isActive
+                                  ? "translate3d(0.5rem, 0, 0)"
+                                  : "translate3d(0, 0, 0)",
+                              }}
+                              className={`block text-left text-sm transition-[transform,color,font-weight,font-style] duration-200 ease-out ${
+                                isActive
+                                  ? "font-medium italic text-foreground"
+                                  : "font-normal not-italic text-muted-foreground hover:text-foreground"
+                              }`}
+                            >
+                              {group.title}
+                            </span>
                           </button>
                         </li>
                       )
@@ -295,26 +323,17 @@ export function CaseStudyContent({ study }: { study: CaseStudyData }) {
           </aside>
 
           {/* Right column — main content */}
-          <div className="min-w-0 pb-16 md:pb-20">
+          <div ref={contentRef} className="min-w-0 pb-16 md:pb-20">
             {/* Preamble (intro, stats, etc. before first section-header) */}
             {preamble.length > 0 && (
               <div className="mb-12 md:mb-16">
                 {preamble.map((section, i) => (
-                  <div
+                  <SectionRenderer
                     key={i}
-                    className={caseStudyEnterClass(entrance)}
-                    style={caseStudyEnterMotionStyle(
-                      entrance,
-                      stagger.contentBase + i,
-                      stagger.STEP_MS
-                    )}
-                  >
-                    <SectionRenderer
-                      section={section}
-                      prevType={preamble[i - 1]?.type}
-                      nextType={preamble[i + 1]?.type}
-                    />
-                  </div>
+                    section={section}
+                    prevType={preamble[i - 1]?.type}
+                    nextType={preamble[i + 1]?.type}
+                  />
                 ))}
               </div>
             )}
@@ -329,21 +348,12 @@ export function CaseStudyContent({ study }: { study: CaseStudyData }) {
                 className="mb-16 md:mb-20"
               >
                 {group.sections.map((section, i) => (
-                  <div
+                  <SectionRenderer
                     key={i}
-                    className={caseStudyEnterClass(entrance)}
-                    style={caseStudyEnterMotionStyle(
-                      entrance,
-                      stagger.groupContentStart[groupIndex] + i,
-                      stagger.STEP_MS
-                    )}
-                  >
-                    <SectionRenderer
-                      section={section}
-                      prevType={group.sections[i - 1]?.type}
-                      nextType={group.sections[i + 1]?.type}
-                    />
-                  </div>
+                    section={section}
+                    prevType={group.sections[i - 1]?.type}
+                    nextType={group.sections[i + 1]?.type}
+                  />
                 ))}
               </section>
             ))}

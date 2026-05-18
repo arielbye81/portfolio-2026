@@ -1,7 +1,4 @@
-import type { CSSProperties } from "react"
 import { PAGE_SHELL, PAGE_INNER } from "@/lib/layout"
-
-const footerRevealStyle = { "--home-reveal-delay": "0ms" } as CSSProperties
 
 export function Footer() {
   const currentYear = new Date().getFullYear()
@@ -10,15 +7,13 @@ export function Footer() {
     <footer className={`${PAGE_SHELL} border-t border-border pt-[calc(2.5rem*2/3)] pb-10`}>
       <div
         className={`${PAGE_INNER} flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between`}
-        data-home-reveal="scroll"
-        style={footerRevealStyle}
       >
         <p className="text-xs text-muted-foreground">
           &copy; {currentYear} Bei Ye. All rights reserved.
         </p>
         <div className="flex items-center gap-6">
           <a
-            href="mailto:406597900@qq.com"
+            href="mailto:beiye.81@yahoo.com"
             className="text-xs text-muted-foreground hover:text-foreground transition-colors"
           >
             Email
@@ -30,6 +25,14 @@ export function Footer() {
             className="text-xs text-muted-foreground hover:text-foreground transition-colors"
           >
             LinkedIn
+          </a>
+          <a
+            href="https://www.xiaohongshu.com/user/profile/5d95a98f0000000001008228?xhsshare=CopyLink&appuid=5d95a98f0000000001008228&apptime=1617073080"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-xs text-muted-foreground hover:text-foreground transition-colors"
+          >
+            REDnote
           </a>
         </div>
       </div>

@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation"
 import Link from "next/link"
 import { Header } from "@/components/header"
+import { Footer } from "@/components/footer"
 import { CaseStudyContent } from "@/components/case-study-content"
 import { caseStudies, CASE_STUDY_SLUGS, isCaseStudySlug } from "@/lib/case-studies"
 import { PAGE_SHELL, PAGE_INNER } from "@/lib/layout"
@@ -87,6 +88,8 @@ export default async function CaseStudyPage({ params }: { params: Promise<{ slug
           </div>
         </footer>
       </article>
+
+      <Footer />
     </main>
   )
 }

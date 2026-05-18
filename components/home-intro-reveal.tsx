@@ -7,7 +7,7 @@ interface HomeIntroRevealProps {
 }
 
 const SKIP_PARAM = "skipIntro"
-const INTRO_DURATION_MS = 2700
+const INTRO_DURATION_MS = 3900
 
 function cleanSkipParam() {
   const url = new URL(window.location.href)
